@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in - Google Accounts</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+      color: #202124;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      width: 100%;
+      max-width: 450px;
+      padding: 40px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    .logo {
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 400;
+      margin: 0 0 8px 0;
+      color: #202124;
+    }
+    .subtitle {
+      font-size: 16px;
+      color: #202124;
+      margin: 0 0 24px 0;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      background-color: #fef3c7;
+      border: 1px solid #fde68a;
+      color: #d97706;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 9999px;
+      margin-bottom: 8px;
+    }
+    .info-text {
+      font-size: 12px;
+      color: #5f6368;
+      margin-bottom: 24px;
+    }
+    .account-list {
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    .account-item {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid #dadce0;
+      cursor: pointer;
+      background: none;
+      border-left: none;
+      border-right: none;
+      border-top: none;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+      transition: background-color 0.15s;
+    }
+    .account-item:last-child {
+      border-bottom: none;
+    }
+    .account-item:hover {
+      background-color: #f8f9fa;
+    }
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 16px;
+      margin-right: 12px;
+      color: white;
+    }
+    .avatar-s {
+      background-color: #3f51b5;
+    }
+    .avatar-p {
+      background-color: #10b981;
+    }
+    .avatar-custom {
+      border: 1px dashed #dadce0;
+      color: #5f6368;
+      background: none;
+      font-size: 20px;
+    }
+    .account-info {
+      flex-grow: 1;
+    }
+    .account-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: #3c4043;
+      display: block;
+    }
+    .account-email {
+      font-size: 12px;
+      color: #70757a;
+      display: block;
+    }
+    .form-container {
+      text-align: left;
+      display: none;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #5f6368;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #dadce0;
+      border-radius: 4px;
+      font-size: 14px;
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    input:focus {
+      border-color: #1a73e8;
+    }
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .btn {
+      flex: 1;
+      padding: 10px 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      border: none;
+      transition: background-color 0.15s;
+    }
+    .btn-back {
+      background-color: #ffffff;
+      color: #1a73e8;
+      border: 1px solid #dadce0;
+    }
+    .btn-back:hover {
+      background-color: #f8f9fa;
+    }
+    .btn-submit {
+      background-color: #1a73e8;
+      color: #ffffff;
+    }
+    .btn-submit:hover {
+      background-color: #1557b0;
+    }
+    .btn-cancel {
+      display: block;
+      width: 100%;
+      padding: 10px 16px;
+      background-color: #ffffff;
+      color: #5f6368;
+      border: 1px solid #dadce0;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background-color 0.15s, color 0.15s;
+      margin-top: 16px;
+      text-align: center;
+      box-sizing: border-box;
+    }
+    .btn-cancel:hover {
+      background-color: #f8f9fa;
+      color: #202124;
+    }
+    .footer {
+      font-size: 12px;
+      color: #5f6368;
+      line-height: 1.5;
+      margin-top: 32px;
+      text-align: left;
+    }
+    .footer a {
+      color: #1a73e8;
+      text-decoration: none;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    .loading-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 0;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #1a73e8;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Google Logo (SVG) -->
+    <div class="logo">
+      <svg width="48" height="48" viewBox="0 0 24 24">
+        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+      </svg>
+    </div>
+
+    <!-- Account Chooser Section -->
+    <div id="chooser-section">
+      <h1>Choose an account</h1>
+      <p class="info-text">to continue to StudyAI Platform</p>
+
+      <div class="account-list" id="accounts-container">
+        <!-- Accounts will be populated dynamically from user's device storage -->
+      </div>
+
+      <button class="btn-cancel" onclick="window.close()">Cancel and go back</button>
+    </div>
+
+    <!-- Custom Account Input Form -->
+    <div id="form-section" class="form-container">
+      <h1>Use another account</h1>
+      <p class="info-text">Enter details to simulate Google authentication</p>
+
+      <form onsubmit="handleFormSubmit(event)" autocomplete="off">
+        <div class="form-group">
+          <label for="custom-email">Email Address</label>
+          <input type="email" id="custom-email" placeholder="example@gmail.com" autocomplete="off" required>
+        </div>
+        <div class="form-group">
+          <label for="custom-password">Password</label>
+          <div style="position: relative;">
+            <input type="password" id="custom-password" placeholder="....." autocomplete="new-password" required style="padding-right: 40px;">
+            <button type="button" onclick="togglePassword()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #5f6368; display: flex; align-items: center; padding: 0;">
+              <svg id="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button type="button" class="btn btn-back" onclick="hideForm()">Back</button>
+          <button type="submit" class="btn btn-submit">Sign In</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Connecting Spinner Section -->
+    <div id="loading-section" class="loading-container">
+      <div class="spinner"></div>
+      <h2 style="font-size: 18px; font-weight: 500; margin: 0 0 4px 0;">Connecting to StudyAI...</h2>
+      <p style="font-size: 13px; color: #5f6368; margin: 0;">Verifying credentials securely</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      To continue, Google will share your name, email address, language preference, and profile picture with StudyAI Platform. Before using this app, you can review its <a href="#">privacy policy</a> and <a href="#">terms of service</a>.
+    </div>
+  </div>
+
+  <script>
+    // Clean up old default seeds from localStorage on load if they were previously saved
+    try {
+      if (!localStorage.getItem('googleSeedsCleaned')) {
+        let simAccountsStr = localStorage.getItem('simulatedGoogleAccounts');
+        if (simAccountsStr) {
+          let simAccounts = JSON.parse(simAccountsStr);
+          if (Array.isArray(simAccounts)) {
+            simAccounts = simAccounts.filter(acc => {
+              const emailLower = acc.email.toLowerCase();
+              return emailLower !== 'premkardani2006@gmail.com' && emailLower !== 'premkardani1105@gmail.com';
+            });
+            localStorage.setItem('simulatedGoogleAccounts', JSON.stringify(simAccounts));
+          }
+        }
+        localStorage.setItem('googleSeedsCleaned', 'true');
+      }
+    } catch (e) {
+      console.error('Error cleaning up old seeds:', e);
+    }
+
+    function getAccounts() {
+      let accounts = [];
+
+      // 1. Try to read active user from main app's localStorage
+      try {
+        const userInfoStr = localStorage.getItem('userInfo');
+        if (userInfoStr) {
+          const userInfo = JSON.parse(userInfoStr);
+          if (userInfo && userInfo.email) {
+            accounts.push({
+              email: userInfo.email,
+              name: userInfo.name || 'Current User',
+              picture: userInfo.profilePicture || ''
+            });
+          }
+        }
+      } catch (e) {
+        console.error('Error reading active user info:', e);
+      }
+
+      // 2. Try to read email from URL parameter (e.g. passed from Login/Register email fields)
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlEmail = urlParams.get('email');
+        if (urlEmail && urlEmail.toLowerCase().endsWith('@gmail.com')) {
+          const emailLower = urlEmail.toLowerCase();
+          // Derive name from email
+          let name = '';
+          const parts = emailLower.split('@')[0].split(/[._\-]/);
+          name = parts.map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
+          if (!name) name = 'Google User';
+
+          // Check if this account is already in simulatedGoogleAccounts
+          const simAccountsStr = localStorage.getItem('simulatedGoogleAccounts');
+          let simAccounts = [];
+          if (simAccountsStr) {
+            simAccounts = JSON.parse(simAccountsStr);
+          }
+          const exists = simAccounts.some(acc => acc.email.toLowerCase() === emailLower);
+          if (!exists) {
+            simAccounts.push({
+              email: urlEmail,
+              name: name,
+              picture: 'https://lh3.googleusercontent.com/a/default-user'
+            });
+            localStorage.setItem('simulatedGoogleAccounts', JSON.stringify(simAccounts));
+          }
+        }
+      } catch (e) {
+        console.error('Error handling URL email parameter:', e);
+      }
+
+      // 3. Read other simulated accounts stored on this device
+      try {
+        const simAccountsStr = localStorage.getItem('simulatedGoogleAccounts');
+        let simAccounts = [];
+        if (simAccountsStr) {
+          simAccounts = JSON.parse(simAccountsStr);
+        }
+
+        // Filter out non-gmail and other mock accounts
+        simAccounts = simAccounts.filter(acc => {
+          const emailLower = acc.email.toLowerCase();
+          return emailLower.endsWith('@gmail.com') && 
+                 !emailLower.includes('diwanishruti05') && 
+                 !emailLower.includes('23012021008');
+        });
+
+        if (Array.isArray(simAccounts)) {
+          simAccounts.forEach(acc => {
+            // Ensure no duplicate emails
+            const exists = accounts.some(existing => existing.email.toLowerCase() === acc.email.toLowerCase());
+            if (!exists) {
+              accounts.push(acc);
+            }
+          });
+        }
+      } catch (e) {
+        console.error('Error reading simulated accounts list:', e);
+      }
+
+      // Final pass: ensure we only return accounts ending with @gmail.com and exclude unwanted mock accounts
+      return accounts.filter(acc => {
+        const emailLower = acc.email.toLowerCase();
+        return emailLower.endsWith('@gmail.com') && 
+               !emailLower.includes('diwanishruti05') && 
+               !emailLower.includes('23012021008');
+      });
+    }
+
+    function saveAccountToDevice(email, name, picture) {
+      try {
+        let accounts = JSON.parse(localStorage.getItem('simulatedGoogleAccounts')) || [];
+        const exists = accounts.some(acc => acc.email.toLowerCase() === email.toLowerCase());
+        if (!exists && email.toLowerCase().endsWith('@gmail.com')) {
+          accounts.push({ email: email, name: name, picture: picture });
+          localStorage.setItem('simulatedGoogleAccounts', JSON.stringify(accounts));
+        }
+      } catch (e) {
+        console.error('Error saving account to device:', e);
+      }
+    }
+
+    function renderAccounts() {
+      const container = document.getElementById('accounts-container');
+      const accounts = getAccounts();
+      let html = '';
+
+      accounts.forEach((acc, idx) => {
+        const initial = acc.name ? acc.name.charAt(0).toUpperCase() : 'G';
+        const colors = ['#3f51b5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+        const avatarBg = colors[idx % colors.length];
+
+        html += `
+          <button class="account-item" onclick="selectAccount('${acc.email}', '${acc.name}', '${acc.picture || ''}')">
+            <div class="avatar" style="background-color: ${avatarBg}">${initial}</div>
+            <div class="account-info">
+              <span class="account-name">${acc.name}</span>
+              <span class="account-email">${acc.email}</span>
+            </div>
+          </button>
+        `;
+      });
+
+      // Add Use another account button
+      html += `
+        <button class="account-item" onclick="showForm()">
+          <div class="avatar avatar-custom">+</div>
+          <div class="account-info">
+            <span class="account-name" style="color: #1a73e8; font-weight: 500;">Use another account</span>
+          </div>
+        </button>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function selectAccount(email, name, picture, password) {
+      if (!email.toLowerCase().endsWith('@gmail.com')) {
+        alert('Only @gmail.com Google accounts are supported.');
+        return;
+      }
+
+      // Save account to local storage list
+      saveAccountToDevice(email, name, picture);
+
+      document.getElementById('chooser-section').style.display = 'none';
+      document.getElementById('form-section').style.display = 'none';
+      document.getElementById('loading-section').style.display = 'flex';
+
+      setTimeout(function() {
+        if (window.opener) {
+          window.opener.postMessage({
+            type: 'GOOGLE_SIGNIN_SUCCESS',
+            payload: { email: email, name: name, picture: picture, password: password }
+          }, window.location.origin);
+        }
+        window.close();
+      }, 1200);
+    }
+
+    function showForm() {
+      document.getElementById('chooser-section').style.display = 'none';
+      document.getElementById('form-section').style.display = 'block';
+    }
+
+    function hideForm() {
+      document.getElementById('form-section').style.display = 'none';
+      document.getElementById('chooser-section').style.display = 'block';
+    }
+
+    function handleFormSubmit(event) {
+      event.preventDefault();
+      const email = document.getElementById('custom-email').value;
+      
+      if (!email.toLowerCase().endsWith('@gmail.com')) {
+        alert('Google Sign-In simulation only supports @gmail.com accounts.');
+        return;
+      }
+
+      const password = document.getElementById('custom-password').value;
+      
+      // Derive name from email
+      let name = '';
+      if (email && email.includes('@')) {
+        const parts = email.split('@')[0].split(/[._\-]/);
+        name = parts.map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
+      }
+      if (!name) {
+        name = 'Google User';
+      }
+
+      selectAccount(email, name, 'https://lh3.googleusercontent.com/a/default-user', password);
+    }
+
+    function togglePassword() {
+      const passwordInput = document.getElementById('custom-password');
+      const eyeIcon = document.getElementById('eye-icon');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.innerHTML = `
+          <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+          <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+          <path d="M6.61 6.61A13.52 13.52 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+          <line x1="2" x2="22" y1="2" y2="22"></line>
+        `;
+      } else {
+        passwordInput.type = 'password';
+        eyeIcon.innerHTML = `
+          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        `;
+      }
+    }
+
+    // Render list when popup loads
+    window.onload = function() {
+      renderAccounts();
+    };
+  </script>
+</body>
+</html>
