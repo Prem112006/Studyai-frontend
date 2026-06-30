@@ -1,7 +1,19 @@
 import axios from 'axios';
 
+const getBaseURL = () => {
+  // Use env variable if provided at build time
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  // Dynamic fallback for Vercel production hosting
+  if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
+    return 'https://studiai-backend-d8wkn338k-prem1105.vercel.app/api';
+  }
+  return 'http://localhost:5001/api';
+};
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5001/api',
+  baseURL: getBaseURL(),
   timeout: 45000, // 45 seconds timeout for slower AI generations
 });
 
