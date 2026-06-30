@@ -7,6 +7,10 @@ const getBaseURL = () => {
   }
   // Dynamic fallback for Vercel production hosting
   if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
+    const hostname = window.location.hostname;
+    if (hostname.includes('frontend')) {
+      return `https://${hostname.replace('frontend', 'backend')}/api`;
+    }
     return 'https://studyai-backend-five.vercel.app/api';
   }
   return 'http://localhost:5001/api';
